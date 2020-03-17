@@ -6,12 +6,12 @@ using StrawberryShake;
 namespace Client
 {
     [System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "11.0.0")]
-    public class CreateUserInputSerializer
+    public partial class CreateUserInputSerializer
         : IInputSerializer
     {
         private bool _needsInitialization = true;
-        private IValueSerializer _iDSerializer;
-        private IValueSerializer _urlSerializer;
+        private IValueSerializer? _stringSerializer;
+        private IValueSerializer? _urlSerializer;
 
         public string Name { get; } = "CreateUserInput";
 
@@ -27,12 +27,12 @@ namespace Client
             {
                 throw new ArgumentNullException(nameof(serializerResolver));
             }
-            _iDSerializer = serializerResolver.Get("ID");
+            _stringSerializer = serializerResolver.Get("String");
             _urlSerializer = serializerResolver.Get("Url");
             _needsInitialization = false;
         }
 
-        public object Serialize(object value)
+        public object? Serialize(object? value)
         {
             if (_needsInitialization)
             {
@@ -46,16 +46,16 @@ namespace Client
             }
 
             var input = (CreateUserInput)value;
-            var map = new Dictionary<string, object>();
+            var map = new Dictionary<string, object?>();
 
             if (input.ClientMutationId.HasValue)
             {
-                map.Add("clientMutationId", SerializeNullableID(input.ClientMutationId.Value));
+                map.Add("clientMutationId", SerializeNullableString(input.ClientMutationId.Value));
             }
 
             if (input.Email.HasValue)
             {
-                map.Add("email", SerializeNullableID(input.Email.Value));
+                map.Add("email", SerializeNullableString(input.Email.Value));
             }
 
             if (input.Image.HasValue)
@@ -65,18 +65,18 @@ namespace Client
 
             if (input.Name.HasValue)
             {
-                map.Add("name", SerializeNullableID(input.Name.Value));
+                map.Add("name", SerializeNullableString(input.Name.Value));
             }
 
             if (input.Password.HasValue)
             {
-                map.Add("password", SerializeNullableID(input.Password.Value));
+                map.Add("password", SerializeNullableString(input.Password.Value));
             }
 
             return map;
         }
 
-        private object SerializeNullableID(object value)
+        private object? SerializeNullableString(object? value)
         {
             if (value is null)
             {
@@ -84,9 +84,9 @@ namespace Client
             }
 
 
-            return _iDSerializer.Serialize(value);
+            return _stringSerializer!.Serialize(value);
         }
-        private object SerializeNullableUrl(object value)
+        private object? SerializeNullableUrl(object? value)
         {
             if (value is null)
             {
@@ -94,10 +94,10 @@ namespace Client
             }
 
 
-            return _urlSerializer.Serialize(value);
+            return _urlSerializer!.Serialize(value);
         }
 
-        public object Deserialize(object value)
+        public object? Deserialize(object? value)
         {
             throw new NotSupportedException(
                 "Deserializing input values is not supported.");

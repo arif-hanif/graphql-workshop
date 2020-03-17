@@ -9,7 +9,7 @@ type Query {
   me: Person!
   "Gets access to all the people known to this service."
   people(after: String before: String first: PaginationAmount last: PaginationAmount order_by: PersonSort where: PersonFilter): PersonConnection
-  personByEmail(email: ID!): Person!
+  personByEmail(email: String!): Person!
   personById(id: ID!): Person!
 }
 
@@ -18,11 +18,13 @@ type Mutation {
   inviteFriend(input: InviteFriendInput!): InviteFriendPayload!
   login(input: LoginInput!): LoginPayload!
   sendMessage(input: SendMessageInput!): SendMessagePayload!
+  typing(input: TypingInput!): TypingPayload!
 }
 
 type Subscription {
   onMessageReceived: Message!
   onOnline: Person!
+  onTyping: Person!
 }
 
 "The multiplier path scalar represents a valid GraphQL multiplier path string."
@@ -30,28 +32,28 @@ scalar MultiplierPath
 
 type Person {
   addFriendId(id: ID!): Person!
-  email: ID!
+  email: String!
   friends(after: String before: String first: PaginationAmount last: PaginationAmount order_by: PersonSort where: PersonFilter): PersonConnection
   id: ID!
   imageUri: Url
   isOnline: Boolean!
   lastSeen: DateTime!
   messages(after: String before: String first: PaginationAmount last: PaginationAmount order_by: MessageSort where: MessageFilter): MessageConnection
-  name: ID!
+  name: String!
 }
 
 input PersonFilter {
   AND: [PersonFilter!]
-  email: ID
-  email_contains: ID
-  email_ends_with: ID
-  email_in: [ID!]
-  email_not: ID
-  email_not_contains: ID
-  email_not_ends_with: ID
-  email_not_in: [ID!]
-  email_not_starts_with: ID
-  email_starts_with: ID
+  email: String
+  email_contains: String
+  email_ends_with: String
+  email_in: [String!]
+  email_not: String
+  email_not_contains: String
+  email_not_ends_with: String
+  email_not_in: [String!]
+  email_not_starts_with: String
+  email_starts_with: String
   id: ID
   id_gt: ID
   id_gte: ID
@@ -76,16 +78,16 @@ input PersonFilter {
   lastSeen_not_in: [DateTime!]
   lastSeen_not_lt: DateTime
   lastSeen_not_lte: DateTime
-  name: ID
-  name_contains: ID
-  name_ends_with: ID
-  name_in: [ID!]
-  name_not: ID
-  name_not_contains: ID
-  name_not_ends_with: ID
-  name_not_in: [ID!]
-  name_not_starts_with: ID
-  name_starts_with: ID
+  name: String
+  name_contains: String
+  name_ends_with: String
+  name_in: [String!]
+  name_not: String
+  name_not_contains: String
+  name_not_ends_with: String
+  name_not_in: [String!]
+  name_not_starts_with: String
+  name_starts_with: String
   OR: [PersonFilter!]
 }
 
@@ -126,7 +128,7 @@ type Message {
   recipient: Person!
   sender: Person!
   sent: DateTime!
-  text: ID!
+  text: String!
 }
 
 input MessageFilter {
@@ -156,16 +158,16 @@ input MessageFilter {
   sent_not_in: [DateTime!]
   sent_not_lt: DateTime
   sent_not_lte: DateTime
-  text: ID
-  text_contains: ID
-  text_ends_with: ID
-  text_in: [ID!]
-  text_not: ID
-  text_not_contains: ID
-  text_not_ends_with: ID
-  text_not_in: [ID!]
-  text_not_starts_with: ID
-  text_starts_with: ID
+  text: String
+  text_contains: String
+  text_ends_with: String
+  text_in: [String!]
+  text_not: String
+  text_not_contains: String
+  text_not_ends_with: String
+  text_not_in: [String!]
+  text_not_starts_with: String
+  text_starts_with: String
 }
 
 input MessageSort {
@@ -208,54 +210,70 @@ type MessageEdge {
 }
 
 type InviteFriendPayload {
-  clientMutationId: ID
+  clientMutationId: String
   me: Person!
 }
 
 input InviteFriendInput {
-  clientMutationId: ID
-  email: ID!
+  clientMutationId: String
+  email: String!
+}
+
+input TypingInput {
+  "The client mutation id which can be optionally provided with a mutation."
+  clientMutationId: String
+  "The email of the person to which a message is being typed."
+  writingTo: String!
+}
+
+type TypingPayload {
+  "The client mutation id which can be optionally provided with a mutation."
+  clientMutationId: String
+  "The person to which a message is being typed."
+  recipient: Person!
+  "The email of the person who is typing the message."
+  sender: Person!
 }
 
 type CreateUserPayload {
-  clientMutationId: ID
+  clientMutationId: String
   user: User!
 }
 
 input CreateUserInput {
-  clientMutationId: ID
-  email: ID!
+  clientMutationId: String
+  email: String!
   image: Url
-  name: ID!
-  password: ID!
+  name: String!
+  password: String!
 }
 
 input LoginInput {
-  clientMutationId: ID
-  email: ID!
-  password: ID!
+  clientMutationId: String
+  email: String!
+  password: String!
 }
 
 type LoginPayload {
-  clientMutationId: ID
+  clientMutationId: String
   me: Person!
-  scheme: ID!
-  token: ID!
+  scheme: String!
+  token: String!
 }
 
 type SendMessagePayload {
-  clientMutationId: ID
+  clientMutationId: String
   message: Message!
   recipient: Person!
   sender: Person!
 }
 
 input SendMessageInput {
-  clientMutationId: ID
+  clientMutationId: String
   "The email of the person to which a message shall be send."
-  recipientEmail: ID!
+  recipientEmail: String!
   "The message text."
-  text: ID!
+  text: String!
 }
 
 enum Direction {
@@ -269,7 +287,7 @@ scalar DateTime
 scalar Url
 
 type User {
-  email: ID!
+  email: String!
   id: ID!
   personId: ID!
 }

@@ -4,15 +4,23 @@
     <p>Please fill in the form to sign in!</p>
   </header>
 
-  <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+  <EditForm
+    Model="@_model"
+    OnValidSubmit="OnValidSubmit"
+  >
     <DataAnnotationsValidator />
     <ValidationSummary />
+
+    @if (ShowInvalidCredentialError)
+    {
+      <div class="wrong-credentials">Wrong credentials.</div>
+    }
 
     <label>
       <InputText
         type="email"
         placeholder="Email"
-        @bind-Value="@model.Email"
+        @bind-Value="@_model.Email"
       />
     </label>
 
@@ -20,7 +28,7 @@
       <InputText
         type="password"
         placeholder="Password"
-        @bind-Value="@model.Password"
+        @bind-Value="@_model.Password"
       />
     </label>
 
@@ -36,10 +44,13 @@
 </div>
 
 @code {
-    private readonly SignInModel model = new SignInModel();
+    private readonly SignInModel _model = new SignInModel();
 
     [Parameter]
     public EventCallback ClickSignUp { get; set; }
+
+    [Parameter]
+    public bool ShowInvalidCredentialError { get; set; }
 
     [Parameter]
     public EventCallback<SignInModel> HandleSignIn { get; set; }
@@ -48,7 +59,7 @@
     {
         if (HandleSignIn.HasDelegate)
         {
-            await HandleSignIn.InvokeAsync(model);
+            await HandleSignIn.InvokeAsync(_model);
         }
     }
 }

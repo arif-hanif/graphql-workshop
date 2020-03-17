@@ -32,19 +32,19 @@ namespace Chat.Server.People
         public IQueryable<Person> GetPeople(
             [Service]IPersonRepository personRepository) =>
             personRepository.GetPersons();
- 
+
         [Authorize]
         public Task<Person> GetPersonByEmailAsync(
             string email,
             PersonByEmailDataLoader personByEmail,
-            CancellationToken cancellationToken) => 
+            CancellationToken cancellationToken) =>
             personByEmail.LoadAsync(email, cancellationToken);
 
         [Authorize]
         public Task<Person> GetPersonByIdAsync(
             Guid id,
             PersonByIdDataLoader personById,
-            CancellationToken cancellationToken) => 
+            CancellationToken cancellationToken) =>
             personById.LoadAsync(id, cancellationToken);
     }
 }

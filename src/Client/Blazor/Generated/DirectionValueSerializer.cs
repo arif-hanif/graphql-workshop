@@ -6,7 +6,7 @@ using StrawberryShake;
 namespace Client
 {
     [System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "11.0.0")]
-    public class DirectionValueSerializer
+    public partial class DirectionValueSerializer
         : IValueSerializer
     {
         public string Name => "Direction";
@@ -17,7 +17,7 @@ namespace Client
 
         public Type SerializationType => typeof(string);
 
-        public object Serialize(object value)
+        public object? Serialize(object? value)
         {
             if (value is null)
             {
@@ -37,7 +37,7 @@ namespace Client
             }
         }
 
-        public object Deserialize(object serialized)
+        public object? Deserialize(object? serialized)
         {
             if (serialized is null)
             {

@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using GreenDonut;
+using HotChocolate.DataLoader;
 
 namespace Chat.Server.People
 {
     public class PersonByEmailDataLoader
-        : DataLoaderBase<string, Person>
+        : BatchDataLoader<string, Person>
     {
         private readonly IPersonRepository _repository;
 
@@ -15,26 +15,12 @@ namespace Chat.Server.People
             _repository = repository;
         }
 
-        protected override async Task<IReadOnlyList<Result<Person>>> FetchAsync(
-            IReadOnlyList<string> keys,
-            CancellationToken cancellationToken)
+        protected override async Task<IReadOnlyDictionary<string, Person>> LoadBatchAsync(
+            IReadOnlyList<string> keys, CancellationToken cancellationToken)
         {
-            IReadOnlyDictionary<string, Person> result =
-                await _repository.GetPeopleByEmailAsync(
-                    keys, cancellationToken)
-                    .ConfigureAwait(false);
-
-            var users = new Result<Person>[keys.Count];
-
-            for (int i = 0; i < keys.Count; i++)
-            {
-                if (result.TryGetValue(keys[i], out Person? person))
-                {
-                    users[i] = person;
-                }
-            }
-
-            return users;
+            return await _repository.GetPeopleByEmailAsync(
+                keys, cancellationToken)
+                .ConfigureAwait(false);
         }
     }
 }

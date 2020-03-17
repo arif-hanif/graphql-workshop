@@ -6,15 +6,15 @@ using StrawberryShake;
 namespace Client
 {
     [System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "11.0.0")]
-    public class PersonConnection
+    public partial class PersonConnection
         : IPersonConnection
     {
         public PersonConnection(
-            IReadOnlyList<IPerson> nodes)
+            global::System.Collections.Generic.IReadOnlyList<global::Client.IPerson>? nodes)
         {
             Nodes = nodes;
         }
 
-        public IReadOnlyList<IPerson> Nodes { get; }
+        public global::System.Collections.Generic.IReadOnlyList<global::Client.IPerson>? Nodes { get; }
     }
 }

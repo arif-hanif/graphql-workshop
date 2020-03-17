@@ -12,11 +12,19 @@ using HotChocolate;
 using HotChocolate.AspNetCore;
 using HotChocolate.AspNetCore.Voyager;
 using HotChocolate.Types;
+using Microsoft.Extensions.Configuration;
 
 namespace Chat.Server
 {
     public partial class Startup
     {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+
         public void ConfigureServices(IServiceCollection services)
         {
             ConfigureAuthenticationServices(services);
@@ -24,7 +32,7 @@ namespace Chat.Server
             services.AddCors();
 
             services
-                .AddRepositories()
+                .AddRepositories(Configuration)
                 .AddDataLoaderRegistry()
                 .AddInMemorySubscriptions()
                 .AddGraphQL(
@@ -41,24 +49,24 @@ namespace Chat.Server
                         .AddType<PersonExtension>()
                         .AddType<MessageExtension>()
                         .AddAuthorizeDirectiveType()
+                        .BindClrType<string, StringType>()
                         .BindClrType<Guid, IdType>());
 
             services.AddQueryRequestInterceptor(async (context, builder, ct) =>
             {
                 if (context.User.Identity.IsAuthenticated)
                 {
-                    var personId = 
+                    var personId =
                         Guid.Parse(context.User.FindFirst(WellKnownClaimTypes.UserId).Value);
 
                     builder.AddProperty(
                         "currentPersonId",
                         personId);
-
                     builder.AddProperty(
                         "currentUserEmail",
                         context.User.FindFirst(ClaimTypes.Email).Value);
 
-                    IPersonRepository personRepository = 
+                    IPersonRepository personRepository =
                         context.RequestServices.GetRequiredService<IPersonRepository>();
                     await personRepository.UpdateLastSeenAsync(personId, DateTime.UtcNow, ct);
                 }
@@ -84,7 +92,9 @@ namespace Chat.Server
 
             app.UseWebSockets();
 
-            app.UseGraphQL().UseVoyager();
+            app.UseGraphQL()
+                .UsePlayground()
+                .UseVoyager();
 
             app.UseEndpoints(endpoints =>
             {

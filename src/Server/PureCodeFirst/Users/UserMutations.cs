@@ -88,7 +88,7 @@ namespace Chat.Server.Users
             LoginInput input,
             [Service]IUserRepository userRepository,
             [Service]PersonByEmailDataLoader personByEmail,
-            [Service]IEventDispatcher eventDispatcher,
+            [Service]ITopicEventSender eventSender,
             CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(input.Email))
@@ -150,7 +150,7 @@ namespace Chat.Server.Users
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = identity,
-                Expires = DateTime.UtcNow.AddMinutes(30),
+                Expires = DateTime.UtcNow.AddHours(12),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(Startup.SharedSecret),
                     SecurityAlgorithms.HmacSha256Signature)
@@ -159,7 +159,7 @@ namespace Chat.Server.Users
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
             string tokenString = tokenHandler.WriteToken(token);
 
-            await eventDispatcher.SendAsync<string, Person>("online", me);
+            await eventSender.SendAsync<string, Person>("online", me);
 
             return new LoginPayload(me, tokenString, "bearer", input.ClientMutationId);
         }

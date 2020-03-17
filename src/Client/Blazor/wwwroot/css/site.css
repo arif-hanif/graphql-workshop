@@ -79,6 +79,25 @@ app {
   cursor: pointer;
 }
 
+.person--IsNOTRecipient {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.person--IsRecipient {
+    display: flex;
+    flex: 0 0 auto;
+    background-color: rgba(1, 33, 76, 0.3);
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
 .person:hover {
   background-color: rgba(0, 0, 0, 0.1);
   transition: background-color 0.2s ease-in-out;
@@ -205,7 +224,17 @@ app {
 }
 
 .messages {
-  padding: 0;
+    flex: 1 1 auto;
+    padding: 0;
+}
+
+#scroller * {
+    overflow-anchor: none;
+}
+
+#anchor {
+    overflow-anchor: auto;
+    height: 1px;
 }
 
 .message--incoming,
@@ -495,6 +524,12 @@ app {
 
 .dialog > form > .validation-message {
   margin: 5px 0;
+}
+
+.dialog > form > .wrong-credentials {
+  flex: 0 0 auto;
+  margin: 15px 0;
+  color: #e38968;
 }
 
 .dialog > form > label {

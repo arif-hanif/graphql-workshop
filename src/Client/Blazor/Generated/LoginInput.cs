@@ -6,9 +6,9 @@ using StrawberryShake;
 namespace Client
 {
     [System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "11.0.0")]
-    public class LoginInput
+    public partial class LoginInput
     {
-        public Optional<string> ClientMutationId { get; set; }
+        public Optional<string?> ClientMutationId { get; set; }
 
         public Optional<string> Email { get; set; }
 

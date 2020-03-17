@@ -11,10 +11,10 @@ using StrawberryShake.Transport;
 namespace Client
 {
     [System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "11.0.0")]
-    public class SignUpResultParser
+    public partial class SignUpResultParser
         : JsonResultParserBase<ISignUp>
     {
-        private readonly IValueSerializer _iDSerializer;
+        private readonly IValueSerializer _stringSerializer;
 
         public SignUpResultParser(IValueSerializerCollection serializerResolver)
         {
@@ -22,7 +22,7 @@ namespace Client
             {
                 throw new ArgumentNullException(nameof(serializerResolver));
             }
-            _iDSerializer = serializerResolver.Get("ID");
+            _stringSerializer = serializerResolver.Get("String");
         }
 
         protected override ISignUp ParserData(JsonElement data)
@@ -34,7 +34,7 @@ namespace Client
 
         }
 
-        private ICreateUserPayload ParseSignUpCreateUser(
+        private global::Client.ICreateUserPayload ParseSignUpCreateUser(
             JsonElement parent,
             string field)
         {
@@ -46,7 +46,7 @@ namespace Client
             );
         }
 
-        private IUser ParseSignUpCreateUserUser(
+        private global::Client.IUser ParseSignUpCreateUserUser(
             JsonElement parent,
             string field)
         {
@@ -54,14 +54,14 @@ namespace Client
 
             return new User
             (
-                DeserializeID(obj, "email")
+                DeserializeString(obj, "email")
             );
         }
 
-        private string DeserializeID(JsonElement obj, string fieldName)
+        private string DeserializeString(JsonElement obj, string fieldName)
         {
             JsonElement value = obj.GetProperty(fieldName);
-            return (string)_iDSerializer.Deserialize(value.GetString());
+            return (string)_stringSerializer.Deserialize(value.GetString())!;
         }
     }
 }

@@ -10,13 +10,13 @@ namespace Chat.Server.Messages
     [ExtendObjectType(Name = "Subscription")]
     public class MessageSubscriptions
     {
-        [Subscribe]
+        [SubscribeAndResolve]
         public async Task<IAsyncEnumerable<Message>> OnMessageReceivedAsync(
             [GlobalState]string currentUserEmail,
-            [Service]IEventTopicObserver eventTopicObserver,
+            [Service]ITopicEventReceiver eventReceiver,
             CancellationToken cancellationToken)
         {
-            return await eventTopicObserver.SubscribeAsync<string, Message>(
+            return await eventReceiver.SubscribeAsync<string, Message>(
                 currentUserEmail, cancellationToken)
                 .ConfigureAwait(false);
         }

@@ -11,13 +11,14 @@ using StrawberryShake.Transport;
 namespace Client
 {
     [System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "11.0.0")]
-    public class GetPeopleAndRecipientResultParser
+    public partial class GetPeopleAndRecipientResultParser
         : JsonResultParserBase<IGetPeopleAndRecipient>
     {
-        private readonly IValueSerializer _iDSerializer;
+        private readonly IValueSerializer _stringSerializer;
         private readonly IValueSerializer _urlSerializer;
         private readonly IValueSerializer _booleanSerializer;
         private readonly IValueSerializer _dateTimeSerializer;
+        private readonly IValueSerializer _iDSerializer;
         private readonly IValueSerializer _directionSerializer;
 
         public GetPeopleAndRecipientResultParser(IValueSerializerCollection serializerResolver)
@@ -26,10 +27,11 @@ namespace Client
             {
                 throw new ArgumentNullException(nameof(serializerResolver));
             }
-            _iDSerializer = serializerResolver.Get("ID");
+            _stringSerializer = serializerResolver.Get("String");
             _urlSerializer = serializerResolver.Get("Url");
             _booleanSerializer = serializerResolver.Get("Boolean");
             _dateTimeSerializer = serializerResolver.Get("DateTime");
+            _iDSerializer = serializerResolver.Get("ID");
             _directionSerializer = serializerResolver.Get("Direction");
         }
 
@@ -43,7 +45,7 @@ namespace Client
 
         }
 
-        private IPersonConnection ParseGetPeopleAndRecipientPeople(
+        private global::Client.IPersonConnection? ParseGetPeopleAndRecipientPeople(
             JsonElement parent,
             string field)
         {
@@ -63,7 +65,7 @@ namespace Client
             );
         }
 
-        private IRecipient ParseGetPeopleAndRecipientPersonById(
+        private global::Client.IRecipient ParseGetPeopleAndRecipientPersonById(
             JsonElement parent,
             string field)
         {
@@ -72,16 +74,16 @@ namespace Client
             return new Recipient
             (
                 ParseGetPeopleAndRecipientPersonByIdMessages(obj, "messages"),
-                DeserializeID(obj, "id"),
-                DeserializeID(obj, "name"),
-                DeserializeID(obj, "email"),
+                DeserializeString(obj, "name"),
                 DeserializeNullableUrl(obj, "imageUri"),
                 DeserializeBoolean(obj, "isOnline"),
-                DeserializeDateTime(obj, "lastSeen")
+                DeserializeDateTime(obj, "lastSeen"),
+                DeserializeID(obj, "id"),
+                DeserializeString(obj, "email")
             );
         }
 
-        private IReadOnlyList<IPerson> ParseGetPeopleAndRecipientPeopleNodes(
+        private global::System.Collections.Generic.IReadOnlyList<global::Client.IPerson>? ParseGetPeopleAndRecipientPeopleNodes(
             JsonElement parent,
             string field)
         {
@@ -96,18 +98,18 @@ namespace Client
             }
 
             int objLength = obj.GetArrayLength();
-            var list = new IPerson[objLength];
+            var list = new global::Client.IPerson[objLength];
             for (int objIndex = 0; objIndex < objLength; objIndex++)
             {
                 JsonElement element = obj[objIndex];
                 list[objIndex] = new Person
                 (
-                    DeserializeID(element, "id"),
-                    DeserializeID(element, "name"),
-                    DeserializeID(element, "email"),
+                    DeserializeString(element, "name"),
                     DeserializeNullableUrl(element, "imageUri"),
                     DeserializeBoolean(element, "isOnline"),
-                    DeserializeDateTime(element, "lastSeen")
+                    DeserializeDateTime(element, "lastSeen"),
+                    DeserializeID(element, "id"),
+                    DeserializeString(element, "email")
                 );
 
             }
@@ -115,7 +117,7 @@ namespace Client
             return list;
         }
 
-        private IMessageConnection ParseGetPeopleAndRecipientPersonByIdMessages(
+        private global::Client.IMessageConnection? ParseGetPeopleAndRecipientPersonByIdMessages(
             JsonElement parent,
             string field)
         {
@@ -135,7 +137,7 @@ namespace Client
             );
         }
 
-        private IReadOnlyList<IMessage> ParseGetPeopleAndRecipientPersonByIdMessagesNodes(
+        private global::System.Collections.Generic.IReadOnlyList<global::Client.IMessage>? ParseGetPeopleAndRecipientPersonByIdMessagesNodes(
             JsonElement parent,
             string field)
         {
@@ -150,7 +152,7 @@ namespace Client
             }
 
             int objLength = obj.GetArrayLength();
-            var list = new IMessage[objLength];
+            var list = new global::Client.IMessage[objLength];
             for (int objIndex = 0; objIndex < objLength; objIndex++)
             {
                 JsonElement element = obj[objIndex];
@@ -161,7 +163,7 @@ namespace Client
                     ParseGetPeopleAndRecipientPersonByIdMessagesNodesRecipient(element, "recipient"),
                     ParseGetPeopleAndRecipientPersonByIdMessagesNodesSender(element, "sender"),
                     DeserializeDateTime(element, "sent"),
-                    DeserializeID(element, "text")
+                    DeserializeString(element, "text")
                 );
 
             }
@@ -169,7 +171,7 @@ namespace Client
             return list;
         }
 
-        private IParticipant ParseGetPeopleAndRecipientPersonByIdMessagesNodesRecipient(
+        private global::Client.IParticipant ParseGetPeopleAndRecipientPersonByIdMessagesNodesRecipient(
             JsonElement parent,
             string field)
         {
@@ -178,12 +180,12 @@ namespace Client
             return new Participant
             (
                 DeserializeID(obj, "id"),
-                DeserializeID(obj, "name"),
+                DeserializeString(obj, "name"),
                 DeserializeBoolean(obj, "isOnline")
             );
         }
 
-        private IParticipant ParseGetPeopleAndRecipientPersonByIdMessagesNodesSender(
+        private global::Client.IParticipant ParseGetPeopleAndRecipientPersonByIdMessagesNodesSender(
             JsonElement parent,
             string field)
         {
@@ -192,18 +194,18 @@ namespace Client
             return new Participant
             (
                 DeserializeID(obj, "id"),
-                DeserializeID(obj, "name"),
+                DeserializeString(obj, "name"),
                 DeserializeBoolean(obj, "isOnline")
             );
         }
 
-        private string DeserializeID(JsonElement obj, string fieldName)
+        private string DeserializeString(JsonElement obj, string fieldName)
         {
             JsonElement value = obj.GetProperty(fieldName);
-            return (string)_iDSerializer.Deserialize(value.GetString());
+            return (string)_stringSerializer.Deserialize(value.GetString())!;
         }
 
-        private System.Uri DeserializeNullableUrl(JsonElement obj, string fieldName)
+        private System.Uri? DeserializeNullableUrl(JsonElement obj, string fieldName)
         {
             if (!obj.TryGetProperty(fieldName, out JsonElement value))
             {
@@ -215,24 +217,30 @@ namespace Client
                 return null;
             }
 
-            return (System.Uri)_urlSerializer.Deserialize(value.GetString());
+            return (System.Uri?)_urlSerializer.Deserialize(value.GetString())!;
         }
 
         private bool DeserializeBoolean(JsonElement obj, string fieldName)
         {
             JsonElement value = obj.GetProperty(fieldName);
-            return (bool)_booleanSerializer.Deserialize(value.GetBoolean());
+            return (bool)_booleanSerializer.Deserialize(value.GetBoolean())!;
         }
 
         private System.DateTimeOffset DeserializeDateTime(JsonElement obj, string fieldName)
         {
             JsonElement value = obj.GetProperty(fieldName);
-            return (System.DateTimeOffset)_dateTimeSerializer.Deserialize(value.GetString());
+            return (System.DateTimeOffset)_dateTimeSerializer.Deserialize(value.GetString())!;
+        }
+
+        private string DeserializeID(JsonElement obj, string fieldName)
+        {
+            JsonElement value = obj.GetProperty(fieldName);
+            return (string)_iDSerializer.Deserialize(value.GetString())!;
         }
         private Direction DeserializeDirection(JsonElement obj, string fieldName)
         {
             JsonElement value = obj.GetProperty(fieldName);
-            return (Direction)_directionSerializer.Deserialize(value.GetString());
+            return (Direction)_directionSerializer.Deserialize(value.GetString())!;
         }
     }
 }

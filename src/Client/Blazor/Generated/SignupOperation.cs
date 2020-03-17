@@ -6,7 +6,7 @@ using StrawberryShake;
 namespace Client
 {
     [System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "11.0.0")]
-    public class SignUpOperation
+    public partial class SignUpOperation
         : IOperation<ISignUp>
     {
         public string Name => "signUp";
@@ -17,7 +17,7 @@ namespace Client
 
         public Type ResultType => typeof(ISignUp);
 
-        public Optional<CreateUserInput> NewUser { get; set; }
+        public Optional<global::Client.CreateUserInput> NewUser { get; set; }
 
         public IReadOnlyList<VariableValue> GetVariableValues()
         {

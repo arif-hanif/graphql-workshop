@@ -20,7 +20,7 @@ namespace Chat.Server.Messages
             [GlobalState]string currentUserEmail,
             PersonByEmailDataLoader personByEmail,
             [Service]IMessageRepository messageRepository,
-            [Service]IEventDispatcher eventDispatcher,
+            [Service]ITopicEventSender eventSender,
             CancellationToken cancellationToken)
         {
             IReadOnlyList<Person> participants =
@@ -41,16 +41,13 @@ namespace Chat.Server.Messages
             Person sender = participants[0];
             Person recipient = participants[1];
 
-            var message = new Message(
-                sender.Id,
-                recipient.Id,
-                input.Text);
+            var message = new Message(sender.Id, recipient.Id, input.Text);
 
             await messageRepository.AddMessageAsync(
                 message, cancellationToken)
                 .ConfigureAwait(false);
 
-            await eventDispatcher.SendAsync(
+            await eventSender.SendAsync(
                 recipient.Email, message, cancellationToken)
                 .ConfigureAwait(false);
 

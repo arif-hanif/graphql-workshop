@@ -6,9 +6,9 @@ using StrawberryShake;
 namespace Client
 {
     [System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "11.0.0")]
-    public interface IRecipient
+    public partial interface IRecipient
         : IPerson
     {
-        IMessageConnection Messages { get; }
+        global::Client.IMessageConnection? Messages { get; }
     }
 }

@@ -6,9 +6,9 @@ using StrawberryShake;
 namespace Client
 {
     [System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "11.0.0")]
-    public interface ILoginPayload
+    public partial interface ILoginPayload
     {
-        IPerson Me { get; }
+        global::Client.IPerson Me { get; }
 
         string Scheme { get; }
 

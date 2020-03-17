@@ -6,39 +6,39 @@ using StrawberryShake;
 namespace Client
 {
     [System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "11.0.0")]
-    public class Recipient
+    public partial class Recipient
         : IRecipient
     {
         public Recipient(
-            IMessageConnection messages, 
-            string id, 
+            global::Client.IMessageConnection? messages, 
             string name, 
-            string email, 
-            System.Uri imageUri, 
+            System.Uri? imageUri, 
             bool isOnline, 
-            System.DateTimeOffset lastSeen)
+            System.DateTimeOffset lastSeen, 
+            string id, 
+            string email)
         {
             Messages = messages;
-            Id = id;
             Name = name;
-            Email = email;
             ImageUri = imageUri;
             IsOnline = isOnline;
             LastSeen = lastSeen;
+            Id = id;
+            Email = email;
         }
 
-        public IMessageConnection Messages { get; }
-
-        public string Id { get; }
+        public global::Client.IMessageConnection? Messages { get; }
 
         public string Name { get; }
 
-        public string Email { get; }
-
-        public System.Uri ImageUri { get; }
+        public System.Uri? ImageUri { get; }
 
         public bool IsOnline { get; }
 
         public System.DateTimeOffset LastSeen { get; }
+
+        public string Id { get; }
+
+        public string Email { get; }
     }
 }

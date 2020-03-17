@@ -7,6 +7,7 @@ using Client.Extensions;
 using Client.Services;
 using Microsoft.AspNetCore.Blazor.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using StrawberryShake.Transport.WebSockets;
 
 namespace Client
 {
@@ -22,12 +23,19 @@ namespace Client
                 (services, client) =>
                 {
                     var token = services.GetRequiredService<ITokenStore>().GetToken();
-                    
                     client.BaseAddress = new Uri("http://localhost:5000/");
                     client.AddBearerToken(token);
                 });
+            builder.Services.AddWebSocketClient(
+                "ChatClient",
+                (services, client) =>
+                {
+                    var token = services.GetRequiredService<ITokenStore>().GetToken();
+                    client.Uri = new Uri("ws://localhost:5000?token=" + token);
+                });
             builder.Services.AddChatClient();
-            builder.Services.AddServices();
+            builder.Services.AddTokenServices();
+            builder.Services.AddTypingTracking();
             builder.RootComponents.Add<App>("app");
 
             await builder.Build().RunAsync();

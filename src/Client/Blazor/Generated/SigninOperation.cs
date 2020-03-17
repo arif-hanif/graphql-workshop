@@ -6,7 +6,7 @@ using StrawberryShake;
 namespace Client
 {
     [System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "11.0.0")]
-    public class SignInOperation
+    public partial class SignInOperation
         : IOperation<ISignIn>
     {
         public string Name => "signIn";
@@ -17,7 +17,7 @@ namespace Client
 
         public Type ResultType => typeof(ISignIn);
 
-        public Optional<LoginInput> SignIn { get; set; }
+        public Optional<global::Client.LoginInput> SignIn { get; set; }
 
         public IReadOnlyList<VariableValue> GetVariableValues()
         {

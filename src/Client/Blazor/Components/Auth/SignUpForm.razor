@@ -4,7 +4,7 @@
     <p>Please fill in this form to create an account!</p>
   </header>
 
-  <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+  <EditForm Model="@_model" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
@@ -12,7 +12,7 @@
       <InputText
         type="text"
         placeholder="Name"
-        @bind-Value="@model.Name"
+        @bind-Value="@_model.Name"
       />
     </label>
 
@@ -20,7 +20,7 @@
       <InputText
         type="email"
         placeholder="Email"
-        @bind-Value="@model.Email"
+        @bind-Value="@_model.Email"
       />
     </label>
 
@@ -28,13 +28,13 @@
       <InputText
         type="password"
         placeholder="Password"
-        @bind-Value="@model.Password"
+        @bind-Value="@_model.Password"
       />
     </label>
 
     <label>
       <InputCheckbox
-        @bind-Value="@model.Accept"
+        @bind-Value="@_model.Accept"
       />
       I accept the Terms of Use and Privacy Policy.
     </label>
@@ -51,7 +51,7 @@
 </div>
 
 @code {
-    private readonly SignUpModel model = new SignUpModel();
+    private readonly SignUpModel _model = new SignUpModel();
 
     [Parameter]
     public EventCallback ClickSignIn { get; set; }
@@ -63,7 +63,7 @@
     {
         if (HandleSignUp.HasDelegate)
         {
-            await HandleSignUp.InvokeAsync(model);
+            await HandleSignUp.InvokeAsync(_model);
         }
     }
 }

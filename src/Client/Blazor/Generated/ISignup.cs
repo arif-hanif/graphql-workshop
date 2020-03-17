@@ -6,8 +6,8 @@ using StrawberryShake;
 namespace Client
 {
     [System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "11.0.0")]
-    public interface ISignUp
+    public partial interface ISignUp
     {
-        ICreateUserPayload CreateUser { get; }
+        global::Client.ICreateUserPayload CreateUser { get; }
     }
 }

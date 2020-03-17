@@ -1,4 +1,5 @@
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -30,9 +31,18 @@ namespace Chat.Server
                         ValidateIssuer = false,
                         ValidateAudience = false
                     };
+                    x.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            if (context.HttpContext.Request.Query.ContainsKey("token"))
+                            {
+                                context.Token = context.HttpContext.Request.Query["token"];
+                            }                            
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
         }
     }
 }
-
-

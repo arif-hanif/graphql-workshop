@@ -5,6 +5,14 @@ namespace Client.Extensions
 {
     public static class OperationResultExtensions
     {
+        
+        public static bool InvalidCredentials<T>(this IOperationResult<T> operation)
+            where T : class
+        {
+            return operation.HasErrors &&
+                   operation.Errors.Any(e => e.Code == "INVALID_CREDENTIALS");
+        }
+        
         public static bool IsNonNullViolation<T>(this IOperationResult<T> operation)
             where T : class
         {

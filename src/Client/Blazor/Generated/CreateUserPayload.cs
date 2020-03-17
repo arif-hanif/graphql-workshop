@@ -6,15 +6,15 @@ using StrawberryShake;
 namespace Client
 {
     [System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "11.0.0")]
-    public class CreateUserPayload
+    public partial class CreateUserPayload
         : ICreateUserPayload
     {
         public CreateUserPayload(
-            IUser user)
+            global::Client.IUser user)
         {
             User = user;
         }
 
-        public IUser User { get; }
+        public global::Client.IUser User { get; }
     }
 }

@@ -6,11 +6,11 @@ using StrawberryShake;
 namespace Client
 {
     [System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "11.0.0")]
-    public class LoginPayload
+    public partial class LoginPayload
         : ILoginPayload
     {
         public LoginPayload(
-            IPerson me, 
+            global::Client.IPerson me, 
             string scheme, 
             string token)
         {
@@ -19,7 +19,7 @@ namespace Client
             Token = token;
         }
 
-        public IPerson Me { get; }
+        public global::Client.IPerson Me { get; }
 
         public string Scheme { get; }
 

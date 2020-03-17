@@ -6,15 +6,15 @@ using StrawberryShake;
 namespace Client
 {
     [System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "11.0.0")]
-    public class RecipientById
+    public partial class RecipientById
         : IRecipientById
     {
         public RecipientById(
-            IRecipient personById)
+            global::Client.IRecipient personById)
         {
             PersonById = personById;
         }
 
-        public IRecipient PersonById { get; }
+        public global::Client.IRecipient PersonById { get; }
     }
 }

@@ -18,7 +18,7 @@
           @key="person.Id"
           User="@person"
           ClickPerson="ClickPerson"
-        />
+          Recipient="Recipient" />
       }
     }
   </ul>
@@ -33,4 +33,7 @@
 
     [Parameter]
     public IPersonConnection People { get; set; }
+
+    [Parameter]
+    public IRecipient? Recipient { get; set; }
 }

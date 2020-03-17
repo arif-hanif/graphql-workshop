@@ -6,14 +6,14 @@ using StrawberryShake;
 namespace Client
 {
     [System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "11.0.0")]
-    public class Message
+    public partial class Message
         : IMessage
     {
         public Message(
             Direction direction, 
             string id, 
-            IParticipant recipient, 
-            IParticipant sender, 
+            global::Client.IParticipant recipient, 
+            global::Client.IParticipant sender, 
             System.DateTimeOffset sent, 
             string text)
         {
@@ -29,9 +29,9 @@ namespace Client
 
         public string Id { get; }
 
-        public IParticipant Recipient { get; }
+        public global::Client.IParticipant Recipient { get; }
 
-        public IParticipant Sender { get; }
+        public global::Client.IParticipant Sender { get; }
 
         public System.DateTimeOffset Sent { get; }
 

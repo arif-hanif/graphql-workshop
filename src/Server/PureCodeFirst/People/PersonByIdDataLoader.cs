@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using GreenDonut;
+using HotChocolate.DataLoader;
 
 namespace Chat.Server.People
 {
     public class PersonByIdDataLoader
-        : DataLoaderBase<Guid, Person>
+        : BatchDataLoader<Guid, Person>
     {
         private readonly IPersonRepository _repository;
 
@@ -16,26 +16,12 @@ namespace Chat.Server.People
             _repository = repository;
         }
 
-        protected override async Task<IReadOnlyList<Result<Person>>> FetchAsync(
-            IReadOnlyList<Guid> keys,
-            CancellationToken cancellationToken)
+        protected override async Task<IReadOnlyDictionary<Guid, Person>> LoadBatchAsync(
+            IReadOnlyList<Guid> keys, CancellationToken cancellationToken)
         {
-            IReadOnlyDictionary<Guid, Person> result =
-                await _repository.GetPeopleAsync(
-                    keys, cancellationToken)
-                    .ConfigureAwait(false);
-
-            var persons = new Result<Person>[keys.Count];
-
-            for (int i = 0; i < keys.Count; i++)
-            {
-                if (result.TryGetValue(keys[i], out Person? person))
-                {
-                    persons[i] = person;
-                }
-            }
-
-            return persons;
+            return await _repository.GetPeopleAsync(
+                keys, cancellationToken)
+                .ConfigureAwait(false);
         }
     }
 }

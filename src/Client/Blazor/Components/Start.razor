@@ -14,6 +14,7 @@
   else
   {
     <SignInForm
+      ShowInvalidCredentialError="@_showInvalidCredentialsError"
       ClickSignUp="OnClickSignUp"
       HandleSignIn="@(async (model) => { await OnHandleSignIn(model); })"
     />
@@ -29,6 +30,7 @@ else
 
 @code {
     private IPerson? _me;
+    private bool _showInvalidCredentialsError;
     private bool _showSignUpForm;
 
     protected override async Task OnInitializedAsync()
@@ -55,45 +57,42 @@ else
     private void OnClickSignUp()
     {
         _showSignUpForm = true;
+        _showInvalidCredentialsError = false;
     }
 
     private async Task OnHandleSignIn(SignInModel model)
     {
-        var signIn = await ChatClient.SignInAsync(new LoginInput
+        var operation = await ChatClient.SignInAsync(new LoginInput
         {
             Email = model.Email,
             Password = model.Password
         });
 
-        if (signIn.HasErrors)
+        if (operation.InvalidCredentials())
         {
-            // todo: error handling
+            _showInvalidCredentialsError = true;
         }
         else
         {
-            _me = signIn.Data.Login.Me;
-            TokenStore.SetToken(signIn.Data.Login.Token);
+            var token = operation.Data?.Login.Token;
+
+            _showInvalidCredentialsError = false;
+            _me = operation.Data?.Login.Me;
+            TokenStore.SetToken(token);
             await SessionStore.SetItemAsync("Me", _me);
-            await SessionStore.SetItemAsync("Token", signIn.Data.Login.Token);
+            await SessionStore.SetItemAsync("Token", token);
         }
     }
 
     private async Task OnHandleSignUp(SignUpModel model)
     {
-        var signUp = await ChatClient.SignUpAsync(new CreateUserInput
+        var operation = await ChatClient.SignUpAsync(new CreateUserInput
         {
             Email = model.Email,
             Name = model.Name,
             Password = model.Password
         });
-
-        if (signUp.HasErrors)
-        {
-            // todo: error handling
-        }
-        else
-        {
-            _showSignUpForm = false;
-        }
+        
+        _showSignUpForm = false;
     }
 }

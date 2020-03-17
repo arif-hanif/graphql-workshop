@@ -11,6 +11,14 @@ query getRecipient($recipientId: ID!) {
   ...recipientById
 }
 
+mutation sendMessage($recipientEmail: String!, $text: String!) {
+  sendMessage(input: { recipientEmail: $recipientEmail, text: $text }) {
+    message {
+      ...message
+    }
+  }
+}
+
 mutation signIn($signIn: LoginInput!) {
   login(input: $signIn) {
     me {
@@ -26,6 +34,30 @@ mutation signUp($newUser: CreateUserInput!) {
     user {
       email
     }
+  }
+}
+
+mutation userIsTyping($writingTo : String!) {
+  typing(input: { writingTo: $writingTo }) {
+    clientMutationId
+  }
+}
+
+subscription onMessageReceived {
+  message: onMessageReceived {
+    ...message
+  }
+}
+
+subscription onUserOnlineStatusChanged {
+  onOnline {
+    ...hasPersonId
+  }
+}
+
+subscription onUserIsTyping {
+  recipient: onTyping {
+    ...hasPersonId
   }
 }
 
@@ -57,12 +89,20 @@ fragment people on Query {
 }
 
 fragment person on Person {
-  id
+  ...hasPersonId
   name
-  email
+  ...hasPersonEmail
   imageUri
   isOnline
   lastSeen
+}
+
+fragment hasPersonId on Person {
+  id
+}
+
+fragment hasPersonEmail on Person {
+  email
 }
 
 fragment recipientById on Query {
@@ -73,7 +113,7 @@ fragment recipientById on Query {
 
 fragment recipient on Person {
   ...person
-  messages {
+  messages (order_by: { sent: ASC }) {
     nodes {
       ...message
     }

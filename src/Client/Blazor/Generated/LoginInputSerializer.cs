@@ -6,11 +6,11 @@ using StrawberryShake;
 namespace Client
 {
     [System.CodeDom.Compiler.GeneratedCode("StrawberryShake", "11.0.0")]
-    public class LoginInputSerializer
+    public partial class LoginInputSerializer
         : IInputSerializer
     {
         private bool _needsInitialization = true;
-        private IValueSerializer _iDSerializer;
+        private IValueSerializer? _stringSerializer;
 
         public string Name { get; } = "LoginInput";
 
@@ -26,11 +26,11 @@ namespace Client
             {
                 throw new ArgumentNullException(nameof(serializerResolver));
             }
-            _iDSerializer = serializerResolver.Get("ID");
+            _stringSerializer = serializerResolver.Get("String");
             _needsInitialization = false;
         }
 
-        public object Serialize(object value)
+        public object? Serialize(object? value)
         {
             if (_needsInitialization)
             {
@@ -44,27 +44,27 @@ namespace Client
             }
 
             var input = (LoginInput)value;
-            var map = new Dictionary<string, object>();
+            var map = new Dictionary<string, object?>();
 
             if (input.ClientMutationId.HasValue)
             {
-                map.Add("clientMutationId", SerializeNullableID(input.ClientMutationId.Value));
+                map.Add("clientMutationId", SerializeNullableString(input.ClientMutationId.Value));
             }
 
             if (input.Email.HasValue)
             {
-                map.Add("email", SerializeNullableID(input.Email.Value));
+                map.Add("email", SerializeNullableString(input.Email.Value));
             }
 
             if (input.Password.HasValue)
             {
-                map.Add("password", SerializeNullableID(input.Password.Value));
+                map.Add("password", SerializeNullableString(input.Password.Value));
             }
 
             return map;
         }
 
-        private object SerializeNullableID(object value)
+        private object? SerializeNullableString(object? value)
         {
             if (value is null)
             {
@@ -72,10 +72,10 @@ namespace Client
             }
 
 
-            return _iDSerializer.Serialize(value);
+            return _stringSerializer!.Serialize(value);
         }
 
-        public object Deserialize(object value)
+        public object? Deserialize(object? value)
         {
             throw new NotSupportedException(
                 "Deserializing input values is not supported.");
